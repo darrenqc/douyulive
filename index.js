@@ -73,7 +73,17 @@ Spider.prototype = {
     		data = JSON.parse(ctx.content);
     	} catch(e) {
     		logger.error('[Channel %s, offset %s] get list json parse failed: %s', channel.name, offset, e);
-    		done();
+    		ctx.tasks.push({
+                opt:{
+                    uri:'http://capi.douyucdn.cn/api/v1/getColumnRoom/'+channel.channelNo,
+                    qs:ctx.params,
+                    params:{
+                        channel:channel
+                    }
+                },
+                next:'getList'
+            });
+            done();
     		return;
     	}
 
